@@ -8,7 +8,9 @@ public class ControllerToObjectTransform : MonoBehaviour
     private MonoBehaviour _controller;
     public IController Controller { get; private set; }
 
-    public GameObject[] GameObjectsToSetPosition;
+    public GameObject GameObjectToSetPosition;
+
+    public Vector3 GameObjectAdjustTranslation = Vector3.zero;
 
 
     protected virtual void Awake()
@@ -24,11 +26,9 @@ public class ControllerToObjectTransform : MonoBehaviour
             if (OVRInput.GetDown(OVRInput.Button.Two, OVRInput.Controller.RTouch))
             {
 
-                print("Setting desk position");
-                this.gameObject.transform.position = pose.position;
+                GameObjectToSetPosition.transform.position = pose.position;
 
-                Vector3 translation = new Vector3(-0.5f, 0f, 0.5f);
-                this.gameObject.transform.Translate(translation, Space.Self);
+                GameObjectToSetPosition.transform.Translate(GameObjectAdjustTranslation, Space.Self);
             }
         }
     }
@@ -36,17 +36,14 @@ public class ControllerToObjectTransform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (!GameObjectToSetPosition)
+            GameObjectToSetPosition = this.gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
         SetPositionToControllerTip();
-        if (Input.GetKeyDown("space"))
-        {
-            print("keypress detected");
-        }
     }
 
 }
